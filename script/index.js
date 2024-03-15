@@ -7,6 +7,9 @@ const finishedCounter = document.getElementById(
 );
 const itemCounter = document.getElementById("todo__container__stats__amount");
 const showIfEmpty = document.getElementById("todo__container__list__empty");
+
+
+
 // add item
 function addItem() {
   let item = {
@@ -16,7 +19,7 @@ function addItem() {
   };
   localStorage.setItem(localStorage.length, JSON.stringify(item));
   itemRenderer(item);
-  location.reload();
+  finishedCount();
 }
 
 // display storage
@@ -42,11 +45,6 @@ function itemRenderer(item) {
 function renderDB() {
   for (let i = 0; i < localStorage.length; i++) {
     itemRenderer(JSON.parse(localStorage[i]));
-    console.log(localStorage.length);
-  }
-  if (localStorage.length <= 0) {
-    console.log(showIfEmpty);
-    showIfEmpty.style.display = "flex";
   }
 }
 
@@ -72,7 +70,9 @@ function changeState() {
 function deleteItem() {
   console.log(this.id);
   localStorage.removeItem(this.id);
-  location.reload();
+  const deleteItem = document.getElementById(this.id);
+  deleteItem.remove();
+  finishedCount();
 }
 
 // todo counter
@@ -83,6 +83,12 @@ function finishedCount() {
     finishedAmount += state ? +1 : 0;
     finishedCounter.innerHTML = `${finishedAmount} / ${localStorage.length}`;
     itemCounter.innerHTML = localStorage.length;
+  }
+  if (localStorage.length <= 0) {
+    showIfEmpty.style.display = "flex";
+    console.log(localStorage.length);
+  } else if (localStorage.length > 0) {
+    showIfEmpty.style.display = "none";
   }
 }
 
